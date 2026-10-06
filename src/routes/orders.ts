@@ -35,3 +35,14 @@ ordersRouter.get("/", (request, response) => {
     total: result.length,
   });
 });
+
+ordersRouter.get("/:id", (request, response) => {
+  const order = orders.find(({ id }) => id === request.params.id);
+
+  if (!order) {
+    response.status(404).json({ error: "订单不存在" });
+    return;
+  }
+
+  response.json({ data: order });
+});

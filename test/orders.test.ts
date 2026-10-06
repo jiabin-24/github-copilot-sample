@@ -35,3 +35,21 @@ describe("GET /api/orders", () => {
     assert.match(response.body.error, /status/);
   });
 });
+
+describe("GET /api/orders/:id", () => {
+  it("returns the requested order", async () => {
+    const response = await request(app).get("/api/orders/ORD-1002").expect(200);
+
+    assert.equal(response.body.data.id, "ORD-1002");
+    assert.equal(response.body.data.customerId, "CUST-002");
+    assert.equal(response.body.data.status, "paid");
+  });
+
+  it("returns 404 when the order does not exist", async () => {
+    const response = await request(app)
+      .get("/api/orders/ORD-9999")
+      .expect(404);
+
+    assert.equal(response.body.error, "订单不存在");
+  });
+});
